@@ -6,7 +6,8 @@
 
 - New release 4.0 since Jan 15
 - big release with a lot of new features
-
+- new major version with breaking changes
+- migration tools
 
 == Features
 
@@ -18,34 +19,91 @@
 [.section-title.green]
 == Multi-Database
 
+== Multi-Database Overview
+
 - ability to run multiple databases in a single dbms
 - default db, system database
 - DSL to manage databases
 
-== Multi-Database
+=== Multi-Database Example
 
-[source,cypher]
+
+[source.center,cypher]
 ----
+:use system
+
 CREATE DATABASE fosdem;
 
-START/STOP/DROP DATABASE fosdem;
+:use fosdem
+
+// START/STOP/DROP DATABASE fosdem;
 ----
 
 [.section-title.purple]
 == Security
 
 
-== Security
+=== Security Overview
 
-- fine grained security
-- users, roles
-  - reader, writer, architect, editor
-- read, write, traverse!
+* fine grained security
+* stored in system database
+* users, roles
+  ** default: reader, writer, architect, editor
+* priviledges - read, write, traverse, access!
+* Managed via administration commands
+
+
+=== User Management
+
+[source.center]
+----
+CREATE USER Alice SET PASSWORD $secret
+CREATE USER Bob SET PASSWORD $secret
+
+CREATE ROLE organizer
+GRANT ROLE organizer TO Alice
+
+CREATE ROLE speaker
+GRANT ROLE speaker TO Bob
+----
+
+=== Priviledge Management
+
+* `ACCESS` - access for specific dbs
+* `TRAVERSE` - entity traversal for specific dbs / types
+* `READ` - property reads for specific dbs / types / property types
+* `MATCH` - shorthand for TRAVERSE + READ 
+
+* Others: Write, token, indexes, constraints, start and stop databases
+
+=== Priviledge Management Example
+
+
+[source.center]
+----
+GRANT ACCESS ON DATABASE fosdem TO speaker, organizer
+
+GRANT TRAVERSE ON GRAPH fosdem TO speaker, organizer
+GRANT READ {*} ON GRAPH fosdem TO speaker, organizer
+// equal to 
+GRANT MATCH {*} ON GRAPH fosdem TO speaker, organizer
+
+DENY READ {email} ON GRAPH fosdem NODES Speaker TO speaker
+
+GRANT WRITE {*} ON GRAPH fosdem TO organizer
+DENY  WRITE {*} ON GRAPH * TO speaker
+
+GRANT CREATE NEW NODE LABEL ON DATABASE fosdem TO organizer
+GRANT CREATE NEW PROPERTY NAME ON DATABASE fosdem TO organizer
+
+// full power!
+GRANT ALL DATABASE PRIVILEGES TO organizer
+----
 
 [.section-title.green]
 == Fabric
 
-== Fabric
+=== Fabric Overview
 
 - proxying neo4j databases 
 - single cypher query distributed across databases
@@ -120,6 +178,15 @@ ORDER BY name DESC LIMIT 10
 
 - soon: graph data science, Bloom, Aura for 4.0
 
+== Documentation
+
+* Release Notes
+** https://neo4j.com/release-notes/neo4j-4-0-0
+* Operations Manual (Fabric, Multi-DB, Security)
+** https://neo4j.com/docs/operations-manual
+** https://neo4j.com/docs/cypher-manual
+* Migration Guide
+** https://neo4j.com/docs/migration-guide/4.0
 
 == Title
 

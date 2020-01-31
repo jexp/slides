@@ -7,13 +7,10 @@
  * in the user manual at https://docs.gradle.org/6.0.1/userguide/multi_project_builds.html
  */
 
-rootProject.name = 'neo4j-training'
+rootProject.name = 'jexp-slides'
 
 include 'demo'
 project(':demo').projectDir = file('modules/demo')
 
-include 'introduction'
-project(':introduction').projectDir = file('modules/introduction')
-
-include 'administration'
-project(':administration').projectDir = file('modules/administration')
+include 'fosdem2020-neo4j-40'
+project(':fosdem2020-neo4j-40').projectDir = file('modules/fosdem2020-neo4j-40')
