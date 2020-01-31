@@ -1,0 +1,350 @@
+= Next Gen Neo4j
+:experimental:
+:imagesdir: ../images
+
+== Availability
+
+- New release 4.0 since Jan 15
+- big release with a lot of new features
+
+
+== Features
+
+- Multi-Database
+- Security
+- Fabric
+
+
+[.section-title.green]
+== Multi-Database
+
+- ability to run multiple databases in a single dbms
+- default db, system database
+- DSL to manage databases
+
+== Multi-Database
+
+[source,cypher]
+----
+CREATE DATABASE fosdem;
+
+START/STOP/DROP DATABASE fosdem;
+----
+
+[.section-title.purple]
+== Security
+
+
+== Security
+
+- fine grained security
+- users, roles
+  - reader, writer, architect, editor
+- read, write, traverse!
+
+[.section-title.green]
+== Fabric
+
+== Fabric
+
+- proxying neo4j databases 
+- single cypher query distributed across databases
+- allows
+  - sharding
+  - federation
+  - distributed processing
+  
+- database selection in query
+
+Tobias will talk about it in detail
+
+[.section-title.gold]
+== Cypher Features
+
+=== Existential Subqueries
+
+[source,cypher]
+----
+MATCH (p:Person)
+WHERE EXISTS {
+	MATCH (p)-[:DIRECTED]->()
+}
+RETURN p as director
+----
+
+=== Isolated Subqueries
+
+Allows "post-union-processing"
+
+[source,cypher]
+----
+call { 
+  MATCH (a:Actor) RETURN a.name as name
+  UNION
+  MATCH (d:Director) RETURN d.name as name  
+}
+RETURN distinct name 
+ORDER BY name DESC LIMIT 10
+----
+
+=== Index Improvements
+
+- load property values from index
+- aggregation (min, max, distinct)
+
+=== Deprecations 
+
+- {} parameter syntax
+- extract, filter
+
+== Cypher Shell
+
+- parameter paramter
+- `:source <file>` and `-file <file.cypher>`
+- multi-db support
+- 
+
+== Other
+
+- Cluster: multi raft
+- Multi-Leader
+- Akka for Cluster state management
+
+== Availability
+
+- available via Neo4j Desktop 1.2.4
+- tar, zip download
+- Docker, Debian, RPM
+
+- Cypher-Shell, APOC
+
+- soon: graph data science, Bloom, Aura for 4.0
+
+
+== Title
+
+A normal paragraph.
+Line breaks are not preserved.
+
+An unordered list of items:
+
+* First level
+** Second level
+*** Third level
+
+=== Second level 1
+
+Content
+
+=== Section level 2
+
+Content
+
+=== Section level 3
+
+Content
+
+==== Third level 3.1
+
+Content
+
+== Formatting
+
+[%hardbreaks]
+*strong importance* (aka bold)
+_stress emphasis_ (aka italic)
+`monospaced` (aka typewriter text)
+"`double`" and '`single`' typographic quotes
++passthrough text+ (substitutions disabled)
+`+literal text+` (monospaced with substitutions disabled)
+
+== Speaker notes
+
+This slide contains speaker notes. +
+Press kbd:[s] to open the speaker notes view.
+
+[.notes]
+--
+Being a declarative language, Cypher focuses on the clarity of expressing *what* to retrieve from a graph, not on *how* to retrieve it.
+You can think of Cypher as mapping English language sentence structure to patterns in a graph.
+--
+
+== Cypher syntax highlighting
+
+Find all people who acted in the movie, The Matrix, returning the nodes and relationships found:
+
+[source,cypher]
+----
+MATCH (p:Person)-[rel:ACTED_IN]->(m:Movie {title: 'The Matrix'})
+RETURN p, rel, m
+----
+
+== Vertically aligned code block
+
+[source.center,cypher]
+----
+MATCH (p:Person)-[rel:ACTED_IN]->(m:Movie {title: 'The Matrix'})
+RETURN p, rel, m
+----
+
+== Images
+
+image::MatchRelationshipActedIn.png[height=500,align=center,role=border]
+
+== Video
+
+[.center]
+video::Sz2C618QKN8[youtube,height=500,width=900]
+
+== Two-columns layout
+
+[.is-half.left]
+--
+* Declarative query language
+* Focuses on _what_, not how to retrieve
+* Uses keywords such as `MATCH`, `WHERE`, `CREATE`
+* Runs in the database server for the graph
+* ASCII art to represent nodes and relationships
+--
+
+[.is-half.right]
+image::overview.svg[Overview,align=center]
+
+== Column sizes
+
+[.is-one-third.left]
+--
+[.underline]#One third#
+
+image::FollowsRelationships.png[width=350px,align=center]
+--
+
+[.is-two-thirds.right]
+--
+[.underline]#Two thirds#
+
+Find all people who follow _Angela Scope_, returning the nodes:
+
+[source,cypher]
+----
+MATCH (p:Person)-[:FOLLOWS]->(:Person {name:'Angela Scope'})
+RETURN p
+----
+
+image::AngelaFollowers.png[width=600,align=center,role=border]
+--
+
+[.section-title.green]
+== Section title (green)
+
+[.section-title.gold]
+== Section title (gold)
+
+[.section-title.purple]
+== Section title (purple)
+
+[.title.green]
+== Title (green)
+
+[.title.gold]
+== Title (gold): Subtitle
+
+In Neo4j Browser:
+
+kbd:[:play intro-neo4j-exercises]
+
+Then follow instructions for Exercise 1.
+
+[.title.purple]
+== Title (purple)
+
+[.half.left.green,transition="fade-in fade-out"]
+== !
+
+[.is-half.left.has-dark-background]
+--
+Some authors
+
+[circle]
+- Edgar Allen Poe
+- Sheri S. Tepper
+- Bill Bryson
+--
+
+[.is-half.right]
+--
+A normal paragraph.
+Line breaks are not preserved.
+// line comments, which are lines that start with //, are skipped
+
+A blank line separates paragraphs.
+--
+
+[.half.left.gold,transition="fade-in fade-out"]
+== !
+
+[.is-half.left.has-dark-background]
+--
+*Modeling relational to graph*
+
+Many applications' data is modeled as relational data. +
+There are some similarities between a relational model and a graph model
+--
+
+[.is-half.right]
+--
+[cols="<.^,<.^", options="header",stripes="none"]
+|====
+|Relational
+|Graph
+
+|Rows
+|Nodes
+
+|Joins
+|Relationships
+
+|Table names
+|Labels
+
+|Columns
+|Properties
+|====
+--
+
+[.half.right.purple,transition="fade-in fade-out"]
+== !
+
+[.is-half.left]
+--
+video::Nb9tSFVrQuc[youtube,width=560,height=315,pdfwidth=100%]
+--
+
+[.is-half.right.has-dark-background]
+--
+Ordered list
+
+. Step 1
+. Step 2
+.. Step 2a
+.. Step 2b
+. Step 3
+--
+
+[transition="fade-in"]
+== Quiz
+
+[.statement]
+Suppose you have a graph that contains _Customer_ and _Product_ nodes. A _Customer_ node can have a _BOUGHT_ relationship with a _Product_ node.
+_Customer_ nodes can have other relationships with _Product_ nodes.
+A _Customer_ node has a property named _customerName_.
+A _Product_ node has a property named _productName_.
+What Cypher query do you execute to return all of the products (by name) bought by customer 'ABCCO'.
+
+Select the correct answer.
+
+[none.answers]
+- ◻️ [src-cypher]`MATCH (c:Customer {customerName: 'ABCCO'}) RETURN c.BOUGHT.productName`
+- ◻️ [src-cypher]`MATCH (:Customer 'ABCCO')-[:BOUGHT]->(p:Product) RETURN p.productName`
+- ◻️ [src-cypher]`MATCH (p:Product)<-[:BOUGHT_BY]-(:Customer 'ABCCO') RETURN p.productName`
+- ◻️ [.fragment.check.ok]#✔️# [src-cypher]`MATCH (:Customer {customerName: 'ABCCO'})-[:BOUGHT]->(p:Product) RETURN p.productName`

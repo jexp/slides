@@ -1,0 +1,398 @@
+<html>
+<head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-1192232-34"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+          dataLayer.push(arguments);
+      }
+
+      gtag('js', new Date());
+      gtag('config', 'UA-1192232-34');
+  </script>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Neo4j GraphAcademy: Introduction to Neo4j</title>
+  <link rel="stylesheet" type="text/css" href="https://neo4j.com/docs/developer-manual/current/docbook.css"/>
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,300italic"/>
+  <link rel="stylesheet" type="text/css" href="https://neo4j.com/docs/developer-manual/current/css/extra.css"/>
+  <link rel="stylesheet" type="text/css" href="https://neo4j.com/docs/developer-manual/current/css/chunked-base.css"/>
+  <link rel="stylesheet" type="text/css" href="https://neo4j.com/docs/developer-manual/current/css/console.css"/>
+  <link rel="shortcut icon" href="https://neo4j.com/wp-content/themes/neo4jweb/favicon.ico"/>
+  <style>
+    @import "https://neo4j.com/online_training/cypher-gadget/libs/jquery.modal.min.css" screen;
+
+    .modal {
+      width: 775px;
+      height: 775px;
+      padding: 10px;
+      margin: 0;
+    }
+
+    .blocker {
+      height: initial;
+      background-color: transparent;
+    }
+
+    a.button {
+      display: block;
+      text-align: center;
+      width: 250px;
+      font-size: 18px;
+      margin-top: 50px;
+      font-family: 'Open Sans', serif;
+      height: 55px;
+      border-style: solid;
+      border-width: 0;
+      cursor: pointer;
+      color: white;
+      padding: 15px;
+      font-weight: 300;
+      background-color: #6dcc9c;
+      border-color: #4ac084;
+    }
+
+    .button a:hover {
+      background-color: #4ac084;
+    }
+
+    .listingblock.syntax > .content > pre {
+      background-color: #eaf1f8;
+    }
+
+    .listingblock > .content {
+      width: 800px;
+      height: auto;
+    }
+
+    .listingblock > .content > pre > code {
+      font-size: 16px;
+      font-weight: 100;
+    }
+
+    .headerlink {
+      margin-left: 10px !important;
+      margin-right: 10px !important;
+    }
+
+    @media only screen and (max-width: 1350px) {
+      #helplink {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+<header style="top: 0;">
+  <a href="../part-0/" id="logo"><img src="https://neo4j.com/wp-content/themes/neo4jweb/assets/images/neo4j-logo-2015.png" alt="Neo4j Logo"></a>
+  <ul class="documentation-library">
+    <li id="menu-module-1">
+      <a class="headerlink" href="../part-1/"
+         <% if attr('currsect') == '1' %> style="color: #000"
+         <% end %>>
+            <span class="fa-stack" style="margin-top: -2px">
+              <span class="fa fa-circle-o fa-stack-2x"></span>
+              <strong class="fa-stack-1x">1</strong>
+            </span>
+        Intro to Graph DBs</a>
+    </li>
+    <li id="menu-module-2">
+      <a class="headerlink" href="../part-2/"
+         <% if attr('currsect') == '2' %> style="color: #000"
+         <% end %>>
+            <span class="fa-stack" style="margin-top: -2px">
+              <span class="fa fa-circle-o fa-stack-2x"></span>
+              <strong class="fa-stack-1x">2</strong>
+            </span>
+        Intro to Neo4j</a>
+    </li>
+    <li id="menu-module-3">
+      <a class="headerlink" href="../part-3/"
+         <% if attr('currsect') == '3' %> style="color: #000"
+         <% end %>>
+            <span class="fa-stack" style="margin-top: -2px">
+              <span class="fa fa-circle-o fa-stack-2x"></span>
+              <strong class="fa-stack-1x">3</strong>
+            </span>
+        Dev Env</a>
+    </li>
+    <li id="menu-module-4">
+      <a class="headerlink" href="../part-4/"
+         <% if attr('currsect') == '4' %> style="color: #000"
+         <% end %>>
+            <span class="fa-stack" style="margin-top: -2px">
+              <span class="fa fa-circle-o fa-stack-2x"></span>
+              <strong class="fa-stack-1x">4</strong>
+            </span>
+        Cypher</a>
+    </li>
+    <li id="menu-module-5">
+      <a class="headerlink" href="../part-5/"
+         <% if attr('currsect') == '5' %> style="color: #000"
+         <% end %>>
+            <span class="fa-stack" style="margin-top: -2px">
+              <span class="fa fa-circle-o fa-stack-2x"></span>
+              <strong class="fa-stack-1x">5</strong>
+            </span>
+        Advanced Queries</a>
+    </li>
+    <li id="menu-module-6">
+      <a class="headerlink" href="../part-6/"
+         <% if attr('currsect') == '6' %> style="color: #000"
+         <% end %>>
+            <span class="fa-stack" style="margin-top: -2px">
+              <span class="fa fa-circle-o fa-stack-2x"></span>
+              <strong class="fa-stack-1x">6</strong>
+            </span>
+        Creating Data</a>
+    </li>
+    <li id="menu-module-7">
+      <a class="headerlink" href="../part-7/"
+         <% if attr('currsect') == '7' %> style="color: #000"
+         <% end %>>
+            <span class="fa-stack" style="margin-top: -2px">
+              <span class="fa fa-circle-o fa-stack-2x"></span>
+              <strong class="fa-stack-1x">7</strong>
+            </span>
+        More</a>
+    </li>
+    <li>
+      <a class="headerlink" href="../part-8/"
+         <% if attr('currsect') == '8' %> style="color: #000"
+         <% end %>>
+            <span class="fa-stack" style="margin-top: -2px">
+              <span class="fa fa-circle-o fa-stack-2x"></span>
+              <strong class="fa-stack-1x">8</strong>
+            </span>
+        The End</a>
+    </li>
+  </ul>
+  <div id="helplink" style="position: absolute; top: 10px; right: 30px; font-size: 20px;">
+    <a href="https://community.neo4j.com/c/general/online-training" target="_blank">Need Help?</a>
+  </div>
+  <nav id="header-nav">
+       <span class="nav-previous">
+         <% if (attr? :prevsect) %>
+            <a accesskey="p" href="../part-<%= attr 'prevsect' %>/">
+              <span class="fa fa-long-arrow-left" aria-hidden="true"></span>
+              <%= attr 'prevsecttitle' %></a>
+         <% end %>
+       </span>
+    <span class="nav-current">
+         <p class="nav-title" style="display: none;"><%= attr 'title' %></p>
+       </span>
+    <span class="nav-next">
+         <% if (attr? :nextsect) %>
+            <a accesskey="n" href="../part-<%= attr 'nextsect' %>/"><%= attr 'nextsecttitle' %>
+              <span class="fa fa-long-arrow-right" aria-hidden="true"></span>
+            </a>
+         <% end %>
+       </span>
+  </nav>
+</header>
+<div id="developer-manual" style="padding-top: 150px; padding-left: 20px; padding-bottom: 100px;">
+  <h1><%= attr 'doctitle' %></h1>
+  <%= content %>
+  <a class="next-section medium button" href="../part-<%= attr 'nextsect' %>/">Continue to Module <%= attr 'nextsect' %></a>
+</div>
+<div id="sidebar-wrapper">
+  <% if (attr? :toc) %>
+    <div id="toc" class="<%= attr 'toc-class', 'toc' %>">
+      <div id="toctitle">Module: <%= attr 'doctitle' %></div>
+      <%= converter.convert self, 'outline' %>
+    </div>
+  <% end %>
+  <div id="progress" style="position:absolute; bottom:100px;"></div>
+</div>
+<% if syntax_highlighter && syntax_highlighter.docinfo?(:footer) %>
+<%
+  unless (asset_uri_scheme = (attr('asset-uri-scheme', 'https'))).empty?
+    asset_uri_scheme = %(#{asset_uri_scheme}:)
+  end
+  cdn_base_url = %(#{asset_uri_scheme}//cdnjs.cloudflare.com/ajax/libs)
+%>
+<%= syntax_highlighter.docinfo(:footer, self, cdn_base_url: cdn_base_url, linkcss: attr?('linkcss'), self_closing_tag_slash: '/') %>
+<% end %>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<script src="https://neo4jsandbox.com/js/js.cookie-2.1.3.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js" type="text/javascript"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" type="text/javascript"></script>
+<script type="text/javascript">window.trainingPartName = "module-<%= attr 'currsect' %>";</script>
+<script>window.trainingClassName = 'online-training-v2';</script>
+<script src="https://neo4j.com/online_training/cypher-gadget/libs/underscore.js"></script>
+<script src="https://neo4j.com/online_training/cypher-gadget/libs/jquery.js"></script>
+<script src="https://neo4j.com/online_training/cypher-gadget/libs/jquery-ui.min.js"></script>
+<script src="https://neo4j.com/online_training/cypher-gadget/libs/jquery.modal.min.js"></script>
+<% if attr('env') != 'dev' %>
+<script src="https://browser.sentry-cdn.com/4.4.1/bundle.min.js" crossorigin="anonymous"></script>
+<script type="text/javascript">Sentry.init({dsn: 'https://652808557bb1478883636c96edb51739@sentry.io/1342352'});</script>
+<script src="https://munchkin.marketo.net/munchkin.js"></script>
+<script>Munchkin.init('773-GON-065');</script>
+<script src="https://neo4j.com/online_training/gadgetUtils.js"></script>
+<script>
+    window.intercomSettings = {
+        app_id: "dt0ig5ab",
+        hide_default_launcher: true
+    };
+</script>
+<script>(function () {
+    var w = window;
+    var ic = w.Intercom;
+    if (typeof ic === "function") {
+        ic('reattach_activator');
+        ic('update', intercomSettings);
+    } else {
+        var d = document;
+        var i = function () {
+            i.c(arguments)
+        };
+        i.q = [];
+        i.c = function (args) {
+            i.q.push(args)
+        };
+        w.Intercom = i;
+
+        function l() {
+            var s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.async = true;
+            s.src = 'https://widget.intercom.io/widget/dt0ig5ab';
+            var x = d.getElementsByTagName('script')[0];
+            x.parentNode.insertBefore(s, x);
+        }
+
+        if (w.attachEvent) {
+            w.attachEvent('onload', l);
+        } else {
+            w.addEventListener('load', l, false);
+        }
+    }
+})()</script>
+<!-- JWT decoder: ONLY USE TO SEE UNVERIFIED VALUES -->
+<script src="https://neo4jsandbox.com/js/jwt-decode.min.js"></script>
+<script>
+    const SITE_URL = window.location;
+
+    var getTimeDiff = function (time1, time2) {
+        var hourDiff = time2 - time1;
+        var diffDays = Math.floor(hourDiff / 86400000);
+        var diffHrs = Math.floor((hourDiff % 86400000) / 3600000);
+        var diffMins = Math.floor(((hourDiff % 86400000) % 3600000) / 60000);
+        return {"days": diffDays, "hours": diffHrs, "mins": diffMins};
+    };
+
+    var attemptRenewToken = function (silent, nextTimeout, nextTimeoutSilent) {
+        console.log('renewAuth attempting');
+        var iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = 'https://neo4j.com/accounts/login?targetUrl=' + encodeURIComponent(SITE_URL);
+        document.body.appendChild(iframe);
+        if (nextTimeout) {
+            setTimeout(
+                function () {
+                    attemptRenewToken(nextTimeoutSilent, nextTimeout, nextTimeoutSilent);
+                }, nextTimeout
+            );
+        }
+    };
+
+    var logout = function () {
+        window.location = 'https://neo4j.com/graphacademy/online-training/introduction-to-neo4j/'
+    };
+
+    $(document).ready(function () {
+        var id_token = Cookies.get("com.neo4j.accounts.idToken");
+        var decoded_token = jwt_decode(id_token);
+        var expiresIn = getTimeDiff(Date.now(), (decoded_token.exp) * 1000);
+        if (expiresIn.days > 0 || expiresIn.hours > 0) {
+            // token is good.
+        } else if (expiresIn.days === 0 && expiresIn.hours === 0 && expiresIn.mins > 1 && expiresIn.mins < 60) {
+            // expiring soon, let's immediately get a new token
+            attemptRenewToken(true, 1000 * 60 * 30, false);
+        } else {
+            // token is already expired, log user out in UI; token won't work
+            logout();
+        }
+        getQuizStatus();
+
+        var userInfoIntercom = Cookies.getJSON("com.neo4j.accounts.userInfo");
+        if (userInfoIntercom) {
+            try {
+                window.Intercom("update", {
+                    app_id: "dt0ig5ab",
+                    name: userInfoIntercom.name,
+                    email: userInfoIntercom.email,
+                    user_id: userInfoIntercom.sub,
+                    hide_default_launcher: true
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        Intercom('trackEvent', 'training-introv2-view');
+    });
+</script>
+<script>
+    $( document ).ready(function() {
+        Intercom('trackEvent','training-introv2-view-part<%= attr "currsect" %>');
+    });
+</script>
+<script src="https://graphacademy.neo4j.com/training-classes/js/classes-v2.js" type="text/javascript"></script>
+<script src="https://graphacademy.neo4j.com/training-quizes/js/quizes-v2.js" type="text/javascript"></script>
+<% else %>
+<script type="text/javascript">
+    function renderGadget(containerSelector, options) {
+        if (!options.cypherSetup) return;
+        var frameId = _.uniqueId("exmodal");
+        $(containerSelector).append('<button onclick="setGadgetUrl(\'#' + frameId +
+            '\')" rel="modal:open" class="btn">' + (options.label || 'Gadget') + '</button>');
+
+        $(containerSelector).append(modalWindow(frameId, options));
+    }
+
+    function modalWindow(frameId, options) {
+        // remind: use an absolute uri in data-src.
+        // the original script at https://neo4j.com/online_training/gadgetUtils.js uses a relative uri.
+        return `<div id="${frameId}" class="modal-dialog modal fade draggable" style="display:none;text-align:center;vertical-align:middle;" >
+        <iframe data-src="https://neo4j.com/online_training/cypher-gadget/test.html?cypherSetup=${options.cypherSetup}&${formatTask(options)}" width="725" height="725" frameborder="0" style="margin:5px;"
+          webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+       <div>`;
+    }
+
+    function formatTask(options) {
+        if (options.task) return "cypherTaskJSON=" + encodeURIComponent(JSON.stringify(options.task));
+        if (options.taskName) return "cypherTask=" + options.taskName;
+        return "";
+    }
+
+    function setGadgetUrl(sel) {
+        $(sel).modal();
+        $(sel).draggable();
+        var $iframe = $(sel).find("iframe");
+        $iframe.attr("src", $iframe.data("src"));
+    }
+</script>
+<% end %>
+<script src="https://neo4j.com/online_training/tasks.js"></script>
+<script src="https://js.maxmind.com/js/apis/geoip2/v2.1/geoip2.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $('.admonitionblock.note').find('.icon').html('NOTE');
+    $('.admonitionblock.warning').find('.icon').html('WARNING');
+    $('.admonitionblock.information').find('.icon').html('INFO');
+
+    var isBlock = /^(p|li|div|h\\d|pre|blockquote|td)$/;
+
+    function textContent(node, out) {
+        if (node.nodeType === 3) return out.push(node.nodeValue);
+        for (var ch = node.firstChild; ch; ch = ch.nextSibling) {
+            textContent(ch, out);
+            if (isBlock.test(node.nodeType)) out.push("\n");
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+import org.asciidoctor.gradle.jvm.AsciidoctorTask
+import org.asciidoctor.gradle.jvm.pdf.AsciidoctorPdfTask
+import org.asciidoctor.gradle.jvm.slides.AsciidoctorJRevealJSTask
+import org.kordamp.gradle.livereload.LiveReloadTask
+
+plugins {
+  id 'org.asciidoctor.jvm.gems' version '3.0.0-alpha.4' apply false
+  id 'org.asciidoctor.jvm.convert' version '3.0.0-alpha.4' apply false
+  id 'org.asciidoctor.jvm.pdf' version '3.0.0-alpha.4' apply false
+  id 'org.asciidoctor.jvm.revealjs' version '3.0.0-alpha.4' apply false
+  id 'org.kordamp.gradle.livereload' version '0.2.1' apply false
+}
+
+subprojects {
+
+  apply plugin: 'org.asciidoctor.jvm.gems'
+  apply plugin: 'org.asciidoctor.jvm.revealjs'
+
+  dependencies {
+    asciidoctorGems 'rubygems:rouge:3.13.0'
+  }
+
+  repositories {
+    mavenCentral()
+    jcenter()
+    ruby {
+      gems()
+    }
+  }
+
+  asciidoctorj {
+    requires "${rootProject.projectDir}/resources/extensions.rb"
+    attributes 'allow-uri-read': '',
+      'env': project.hasProperty('env') ? project.property('env') : '',
+      'source-highlighter': 'rouge',
+      'rouge-style': 'neo.forest',
+      'presenter': 'Neo Technology',
+      'twitter': 'neo4j',
+      'email': 'info@neotechnology.com',
+      'neo4j-version': '3.4.4',
+      'currentyear': '2020'
+  }
+
+  revealjs {
+    version = '3.0.0'
+    templateGitHub {
+      organisation = 'hakimel'
+      repository = 'reveal.js'
+      tag = '3.7.0'
+    }
+  }
+
+  task convertOnlineHtml(type: AsciidoctorTask) {
+    dependsOn asciidoctorGemsPrepare
+
+    inputs.dir "${rootProject.projectDir}/resources/templates"
+
+    //noinspection GroovyAccessibility,GroovyAssignabilityCheck
+    asciidoctorj {
+      options template_dirs: ["${rootProject.projectDir}/resources/templates"]
+      attributes 'imagesdir': 'images'
+    }
+
+    baseDir file("${projectDir}/docs")
+    sourceDir file("${projectDir}/docs")
+    outputDir file("${projectDir}/build/online")
+
+    resources {
+      from("${rootProject.projectDir}/resources/images") {
+        include '**'
+        into 'images'
+      }
+      from("${projectDir}/images") {
+        include '**'
+        into 'images'
+      }
+    }
+  }
+
+  task convertSlides(type: AsciidoctorJRevealJSTask) {
+    dependsOn asciidoctorGemsPrepare
+
+    revealjsOptions {
+      controls = false
+      progressBar = true
+      pushToHistory = true
+      overviewMode = true
+      touchMode = true
+      theme = 'white'
+    }
+
+    //noinspection GroovyAccessibility,GroovyAssignabilityCheck
+    asciidoctorj {
+      attributes 'revealjs_customtheme': 'themes/reveal.css',
+        'imagesdir': 'images',
+        'revealjs_center': 'false',
+        'revealjs_width': '1280',
+        'revealjs_height': '720',
+        'revealjs_margin': '0.1',
+        'revealjs_fragmentinurl': 'true',
+        'revealjs_slidenumber': 'c',
+        'revealjs_minscale': '0.2',
+        'revealjs_maxscale': '2'
+    }
+
+    baseDirFollowsSourceDir()
+    sourceDir file("${projectDir}/docs")
+    outputDir file("${projectDir}/build/slides")
+
+    resources {
+      from("${rootProject.projectDir}/resources/themes") {
+        include 'reveal.css'
+        into 'themes'
+      }
+      from("${rootProject.projectDir}/resources/extensions") {
+        include 'cypher-highlightjs.js'
+        into 'extensions'
+      }
+      from("${rootProject.projectDir}/resources/images") {
+        include '**'
+        into 'images'
+      }
+      from("${projectDir}/images") {
+        include '**'
+        into 'images'
+      }
+    }
+  }
+
+  task convertOnlinePdf(type: AsciidoctorPdfTask) {
+    dependsOn asciidoctorGemsPrepare
+
+    inputs.file "${rootProject.projectDir}/resources/themes/pdf-theme.yml"
+
+    //noinspection GroovyAccessibility,GroovyAssignabilityCheck
+    asciidoctorj {
+      modules.pdf.version '1.5.0-rc.2'
+      attributes 'pdf-style': "${rootProject.projectDir}/resources/themes/pdf-theme.yml"
+    }
+
+    baseDir file("${projectDir}/docs")
+    sourceDir file("${projectDir}/docs")
+    outputDir file("${projectDir}/build/online")
+  }
+
+  task convert {
+    dependsOn convertOnlineHtml
+    dependsOn convertOnlinePdf
+    dependsOn convertSlides
+  }
+
+  task liveReload(type: LiveReloadTask) {
+    docRoot "${projectDir}/build"
+  }
+}
+
