@@ -55,7 +55,7 @@ CREATE DATABASE fosdem;
 * Stored in system database
 * Users, roles
   ** Default: reader, writer, architect, editor
-* Priviledges - read, write, traverse, access!
+* Privileges - read, write, traverse, access!
 * Managed via administration commands
 
 
@@ -63,17 +63,10 @@ CREATE DATABASE fosdem;
 
 [source.center,cypher]
 ----
-CREATE USER Michael SET PASSWORD 'secret' CHANGE NOT REQUIRED;
-CREATE USER Sascha SET PASSWORD 'secret' CHANGE NOT REQUIRED;
-
-CREATE ROLE organizer;
-GRANT ROLE organizer TO Michael;
-
-CREATE ROLE speaker;
-GRANT ROLE speaker TO Sascha;
+include::../fosdem-demo.cypher[tag=users]
 ----
 
-== Priviledge Management
+== Privilege Management
 
 * `ACCESS` - access for specific dbs
 * `TRAVERSE` - entity traversal for specific dbs / types
@@ -82,28 +75,12 @@ GRANT ROLE speaker TO Sascha;
 
 * Others: Write, token, indexes, constraints, start and stop databases
 
-== Priviledge Management Example
+== Privilege Management Example
 
 
 [source.center,cypher]
 ----
-GRANT ACCESS ON DATABASE fosdem TO speaker, organizer;
-
-GRANT TRAVERSE ON GRAPH fosdem TO speaker, organizer;
-GRANT READ {*} ON GRAPH fosdem TO speaker, organizer;
-// equal to 
-GRANT MATCH {*} ON GRAPH fosdem TO speaker, organizer;
-
-DENY READ {email} ON GRAPH fosdem NODES Speaker TO speaker;
-
-GRANT WRITE ON GRAPH fosdem TO organizer;
-DENY  WRITE ON GRAPH * TO speaker;
-
-GRANT CREATE NEW NODE LABEL ON DATABASE fosdem TO organizer;
-GRANT CREATE NEW PROPERTY NAME ON DATABASE fosdem TO organizer;
-
-// full power!
-GRANT ALL DATABASE PRIVILEGES ON DATABASE * TO organizer;
+include::../fosdem-demo.cypher[tag=privileges]
 ----
 
 == SystemDB
@@ -135,11 +112,7 @@ Tobias & Petr will talk about it in detail (17:30)
 
 [source,cypher]
 ----
-MATCH (p:Person)
-WHERE EXISTS {
-	MATCH (p)-[:PRESENTS]->()
-}
-RETURN p as director
+include::../fosdem-demo.cypher[tag=existential]
 ----
 
 == Isolated Subqueries
@@ -148,13 +121,7 @@ Allows "post-union-processing"
 
 [source,cypher]
 ----
-call { 
-  MATCH (e:Event) RETURN e.title as title
-  UNION
-  MATCH (k:Keynote) RETURN k.title as title
-}
-RETURN distinct name 
-ORDER BY name DESC LIMIT 10
+include::../fosdem-demo.cypher[tag=subquery-union]
 ----
 
 == Index Improvements
@@ -173,7 +140,7 @@ ORDER BY name DESC LIMIT 10
 
 == Cypher Shell
 
-- Parameter paramter
+- Parameter parameter
 - `:source <file>` and `-file <file.cypher>`
 - Multi-db support
 - 
@@ -225,6 +192,10 @@ image::fosdem-meta.svg[]
 == Graph Data
 
 image::fosdem-graph-track.svg[]
+
+
+[.section-title.gold]
+== Thank You
 
 == Title
 
