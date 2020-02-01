@@ -1,6 +1,12 @@
-= Next Gen Neo4j
 :experimental:
 :imagesdir: ../images
+:bl: pass:[ +]
+= Next Gen Neo4j
+
+{bl}
+{bl}
+
+Michael Hunger, Sascha Peukert
 
 == Availability
 
@@ -55,7 +61,7 @@ CREATE DATABASE fosdem;
 
 === User Management
 
-[source.center]
+[source.center,cypher]
 ----
 CREATE USER Alice SET PASSWORD $secret
 CREATE USER Bob SET PASSWORD $secret
@@ -79,7 +85,7 @@ GRANT ROLE speaker TO Bob
 === Priviledge Management Example
 
 
-[source.center]
+[source.center,cypher]
 ----
 GRANT ACCESS ON DATABASE fosdem TO speaker, organizer
 
@@ -108,13 +114,15 @@ GRANT ALL DATABASE PRIVILEGES TO organizer
 - Proxying neo4j databases
 - Single cypher query distributed across databases
 - Allows
-  - sharding
-  - federation
-  - distributed processing
+  ** sharding
+  ** federation
+  ** distributed processing
   
 - Database selection in query
 
-Tobias & Petr will talk about it in detail
+{bl}
+
+Tobias & Petr will talk about it in detail (17:30)
 
 [.section-title.gold]
 == Cypher Features
@@ -154,6 +162,8 @@ ORDER BY name DESC LIMIT 10
 
 - {} parameter syntax
 - Extract, filter
+- `CYPHER planner=rule` (triggered by use of `START` or `CREATE UNIQUE`)
+- `CYPHER runtime=compiled`
 
 == Cypher Shell
 
@@ -167,6 +177,7 @@ ORDER BY name DESC LIMIT 10
 - Cluster: multi raft
 - Multi-Leader
 - Akka for Cluster state management
+- `CYPHER runtime=pipelined`
 
 == Availability
 
