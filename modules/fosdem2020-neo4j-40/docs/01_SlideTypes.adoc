@@ -63,14 +63,14 @@ CREATE DATABASE fosdem;
 
 [source.center,cypher]
 ----
-CREATE USER Alice SET PASSWORD $secret
-CREATE USER Bob SET PASSWORD $secret
+CREATE USER Michael SET PASSWORD 'secret' CHANGE NOT REQUIRED;
+CREATE USER Sascha SET PASSWORD 'secret' CHANGE NOT REQUIRED;
 
-CREATE ROLE organizer
-GRANT ROLE organizer TO Alice
+CREATE ROLE organizer;
+GRANT ROLE organizer TO Michael;
 
-CREATE ROLE speaker
-GRANT ROLE speaker TO Bob
+CREATE ROLE speaker;
+GRANT ROLE speaker TO Sascha;
 ----
 
 == Priviledge Management
@@ -87,24 +87,28 @@ GRANT ROLE speaker TO Bob
 
 [source.center,cypher]
 ----
-GRANT ACCESS ON DATABASE fosdem TO speaker, organizer
+GRANT ACCESS ON DATABASE fosdem TO speaker, organizer;
 
-GRANT TRAVERSE ON GRAPH fosdem TO speaker, organizer
-GRANT READ {*} ON GRAPH fosdem TO speaker, organizer
+GRANT TRAVERSE ON GRAPH fosdem TO speaker, organizer;
+GRANT READ {*} ON GRAPH fosdem TO speaker, organizer;
 // equal to 
-GRANT MATCH {*} ON GRAPH fosdem TO speaker, organizer
+GRANT MATCH {*} ON GRAPH fosdem TO speaker, organizer;
 
-DENY READ {email} ON GRAPH fosdem NODES Speaker TO speaker
+DENY READ {email} ON GRAPH fosdem NODES Speaker TO speaker;
 
-GRANT WRITE {*} ON GRAPH fosdem TO organizer
-DENY  WRITE {*} ON GRAPH * TO speaker
+GRANT WRITE ON GRAPH fosdem TO organizer;
+DENY  WRITE ON GRAPH * TO speaker;
 
-GRANT CREATE NEW NODE LABEL ON DATABASE fosdem TO organizer
-GRANT CREATE NEW PROPERTY NAME ON DATABASE fosdem TO organizer
+GRANT CREATE NEW NODE LABEL ON DATABASE fosdem TO organizer;
+GRANT CREATE NEW PROPERTY NAME ON DATABASE fosdem TO organizer;
 
 // full power!
-GRANT ALL DATABASE PRIVILEGES TO organizer
+GRANT ALL DATABASE PRIVILEGES ON DATABASE * TO organizer;
 ----
+
+== SystemDB
+
+image::fosdem-systemdb.svg[]
 
 [.section-title.green]
 == Fabric
@@ -133,7 +137,7 @@ Tobias & Petr will talk about it in detail (17:30)
 ----
 MATCH (p:Person)
 WHERE EXISTS {
-	MATCH (p)-[:DIRECTED]->()
+	MATCH (p)-[:PRESENTS]->()
 }
 RETURN p as director
 ----
@@ -145,9 +149,9 @@ Allows "post-union-processing"
 [source,cypher]
 ----
 call { 
-  MATCH (a:Actor) RETURN a.name as name
+  MATCH (e:Event) RETURN e.title as title
   UNION
-  MATCH (d:Director) RETURN d.name as name  
+  MATCH (k:Keynote) RETURN k.title as title
 }
 RETURN distinct name 
 ORDER BY name DESC LIMIT 10
@@ -157,13 +161,15 @@ ORDER BY name DESC LIMIT 10
 
 - Load property values from index
 - Aggregation (min, max, distinct)
+- Index names
 
-== Deprecations
+== Deprecations -> Removals
 
 - {} parameter syntax
 - Extract, filter
 - `CYPHER planner=rule` (triggered by use of `START` or `CREATE UNIQUE`)
 - `CYPHER runtime=compiled`
+- Legacy Manual Lucene Index
 
 == Cypher Shell
 
@@ -198,6 +204,27 @@ ORDER BY name DESC LIMIT 10
 ** https://neo4j.com/docs/cypher-manual
 * Migration Guide
 ** https://neo4j.com/docs/migration-guide/4.0
+
+[.section-title.green]
+== Demo
+
+== Import
+
+* Create database per year (2019,2020)
+* Download XML from Fosdem schedule
+* Create Graph from XML
+* Show Queries
+* Demo Security
+* Show Fabric
+
+
+== Graph Model
+
+image::fosdem-meta.svg[]
+
+== Graph Data
+
+image::fosdem-graph-track.svg[]
 
 == Title
 
