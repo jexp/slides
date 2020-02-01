@@ -31,7 +31,7 @@ Michael Hunger, Sascha Peukert
 - Default db, system database
 - DSL to manage databases
 
-=== Multi-Database Example
+== Multi-Database Example
 
 
 [source.center,cypher]
@@ -45,11 +45,11 @@ CREATE DATABASE fosdem;
 // START/STOP/DROP DATABASE fosdem;
 ----
 
+
 [.section-title.purple]
 == Security
 
-
-=== Security Overview
+== Security Overview
 
 * Fine grained security
 * Stored in system database
@@ -59,7 +59,7 @@ CREATE DATABASE fosdem;
 * Managed via administration commands
 
 
-=== User Management
+== User Management
 
 [source.center,cypher]
 ----
@@ -73,7 +73,7 @@ CREATE ROLE speaker
 GRANT ROLE speaker TO Bob
 ----
 
-=== Priviledge Management
+== Priviledge Management
 
 * `ACCESS` - access for specific dbs
 * `TRAVERSE` - entity traversal for specific dbs / types
@@ -82,7 +82,7 @@ GRANT ROLE speaker TO Bob
 
 * Others: Write, token, indexes, constraints, start and stop databases
 
-=== Priviledge Management Example
+== Priviledge Management Example
 
 
 [source.center,cypher]
@@ -109,7 +109,7 @@ GRANT ALL DATABASE PRIVILEGES TO organizer
 [.section-title.green]
 == Fabric
 
-=== Fabric Overview
+== Fabric Overview
 
 - Proxying neo4j databases
 - Single cypher query distributed across databases
@@ -127,7 +127,7 @@ Tobias & Petr will talk about it in detail (17:30)
 [.section-title.gold]
 == Cypher Features
 
-=== Existential Subqueries
+== Existential Subqueries
 
 [source,cypher]
 ----
@@ -138,7 +138,7 @@ WHERE EXISTS {
 RETURN p as director
 ----
 
-=== Isolated Subqueries
+== Isolated Subqueries
 
 Allows "post-union-processing"
 
@@ -153,12 +153,12 @@ RETURN distinct name
 ORDER BY name DESC LIMIT 10
 ----
 
-=== Index Improvements
+== Index Improvements
 
 - Load property values from index
 - Aggregation (min, max, distinct)
 
-=== Deprecations 
+== Deprecations
 
 - {} parameter syntax
 - Extract, filter
