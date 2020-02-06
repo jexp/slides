@@ -50,6 +50,11 @@ Being a declarative language, Cypher focuses on the clarity of expressing *what*
 You can think of Cypher as mapping English language sentence structure to patterns in a graph.
 --
 
+== Side menu
+
+You can open a menu for quick navigation by +
+pressing kbd:[m] .
+
 == Cypher syntax highlighting
 
 Find all people who acted in the movie, The Matrix, returning the nodes and relationships found:

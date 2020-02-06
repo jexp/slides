@@ -50,6 +50,14 @@ subprojects {
     }
   }
 
+  revealjsPlugins {
+    github 'denehyg', {
+      organisation = 'denehyg'
+      repository = 'reveal.js-menu'
+      branch = 'master'
+    }
+  }
+
   task convertOnlineHtml(type: AsciidoctorTask) {
     dependsOn asciidoctorGemsPrepare
 
@@ -125,6 +133,9 @@ subprojects {
         into 'images'
       }
     }
+
+    plugins 'denehyg/menu.js'
+
   }
 
   task convertOnlinePdf(type: AsciidoctorPdfTask) {
